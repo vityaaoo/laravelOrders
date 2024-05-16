@@ -1,0 +1,41 @@
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border-color: #9ec1f7;
+}
+
+table th, table td {
+    padding: 8px;
+    text-align: left;
+}
+
+table th {
+    background-color: #f2f2f2;
+    color: #333;
+}
+
+table tbody tr:hover {
+    background-color: #f5f5f5;
+}
+
+.pageButton{
+    border: 2px solid rgb(121, 152, 252);
+    background-color: rgb(121, 152, 252);
+    text-align: center;
+    cursor: pointer;
+    color: white;
+    margin: 5px;
+    width: auto;
+    height: auto;
+    border-radius: 5px;
+    font-size: 20px;
+}
+
+input[type="text"] {
+    width: 10%;
+    padding: 10px;
+    border: 1px solid #9ec1f7;
+    border-radius: 5px;
+    outline: none;
+    font-size: 16px;
+}
