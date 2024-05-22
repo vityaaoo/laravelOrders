@@ -18,27 +18,33 @@ class UserController extends Controller
 
     public function login(Request $request)
     {
+        $request->validate([
+            'email' => 'required',
+            'password' => 'required',
+        ]);
+
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
-            $userID = Auth::id();
-            $user = User::find($userID);
-            return view('resultLogin', ['userID' => $userID, 'name' => $user->name]);
-        }
-        else{
+            $user = Auth::user();
+            return view('resultLogin', ['userID' => $user->id, 'name' => $user->name]);
+        } else {
             return back();
         }
     }
 
-
     public function register(Request $request)
     {
-        $credentials = $request->only('email', 'password');
+        $request->validate([
+            'name' => 'required|string|min:1',
+            'email' => 'required|string|email|unique:users',
+            'password' => 'required|string|min:1',
+        ]);
 
         $user = User::where('email', $request->email)->first();
 
         if ($user) {
-            return back();
+            return back()->with('error', 'Email уже зарегистрирован.');
         }
 
         $user = new User();
@@ -47,7 +53,6 @@ class UserController extends Controller
         $user->email = $request->input('email');
         $user->save();
 
-        Auth::login($user);
         return view('authForm');
     }
 
