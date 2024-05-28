@@ -8,54 +8,35 @@ use App\Models\Order;
 
 class UserController extends Controller
 {
-    public function authPage(){
-        return view('authForm');
+    public function addUserForm(){
+        $users=User::all();
+        return view('ajax/formForAjax', ['users' => $users]);
     }
 
-    public function regPage(){
-        return view('registerForm');
+    public function getUsers() {
+        $users = User::all();
+        return view('ajax/tableWithUsers', ['users' => $users]);
     }
 
-    public function login(Request $request)
-    {
+    public function addUser(Request $request){
         $request->validate([
-            'email' => 'required',
-            'password' => 'required',
+            'name' => 'required|string|min:1|unique:users',
+            'sex' => 'required|string|min:1',
+            'age' => 'required|string|min:1|max:99',
+            'address' => 'required|string|min:1',
+            'dateOfBirth' => 'required|date',
         ]);
-
-        $credentials = $request->only('email', 'password');
-
-        if (Auth::attempt($credentials)) {
-            $user = Auth::user();
-            return view('resultLogin', ['userID' => $user->id, 'name' => $user->name]);
-        } else {
-            return back();
-        }
-    }
-
-    public function register(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|min:1',
-            'email' => 'required|string|email|unique:users',
-            'password' => 'required|string|min:1',
-        ]);
-
-        $user = User::where('email', $request->email)->first();
-
-        if ($user) {
-            return back()->with('error', 'Email уже зарегистрирован.');
-        }
-
+    
         $user = new User();
         $user->name = $request->input('name');
-        $user->password = $request->input('password'); 
-        $user->email = $request->input('email');
+        $user->sex = $request->input('sex');
+        $user->age = $request->input('age');
+        $user->address = $request->input('address');
+        $user->dateOfBirth = $request->input('dateOfBirth');
         $user->save();
-
-        return view('authForm');
+    
     }
-
+    
     public function logout()
     {
         Auth::logout();
