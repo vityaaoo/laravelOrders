@@ -11,19 +11,20 @@ class GoogleController extends Controller
 {
     public function googlepage(){
 
-        return socialite::driver('google')->redirect();
+        return Socialite::driver('google')
+        ->with(['prompt' => 'select_account'])
+        ->redirect();
     }
 
-    public function googlecallback(){
-
-        try{
+    public function googleCallback()
+    {
+        try {
             $user = Socialite::driver('google')->user();
             $findUser = User::where('google_id', $user->id)->first();
-            if($findUser){
+            if ($findUser) {
                 Auth::login($findUser);
                 return redirect()->intended('dashboard');
-            }
-            else {
+            } else {
                 $newUser = User::create([
                     'name' => $user->name,
                     'email' => $user->email,
@@ -33,11 +34,9 @@ class GoogleController extends Controller
                 Auth::login($newUser);
                 return redirect()->intended('dashboard');
             }
-        } catch(Exception $e){
+        } catch (Exception $e) {
             dd($e->getMessage());
         }
-        
-        
     }
 }
  

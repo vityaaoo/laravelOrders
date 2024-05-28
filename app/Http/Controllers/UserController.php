@@ -36,6 +36,17 @@ class UserController extends Controller
         $user->save();
     
     }
+
+    public function searchUser(Request $request)
+        {
+            $search = $request->input('search');
+
+            $users = User::where('name', 'LIKE', "%$search%")
+                        ->orWhere('surname', 'LIKE', "%$search%")
+                        ->get();
+
+            return view('pages.friendsSearchResult', ['users' => $users, 'search' => $search]);
+        }
     
     public function logout()
     {
