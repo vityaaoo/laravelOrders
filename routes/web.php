@@ -14,6 +14,7 @@ Route::post('/ordersPage', [OrderController::class, 'openOrderPage']);
 Route::get('/form', [UserController::class, 'addUserForm']);
 Route::get('/newUser', [UserController::class, 'addUser']);
 Route::get('/getUsers', [UserController::class, 'getUsers']);
+Route::get('/searchUser', [UserController::class, 'searchUser']);
 
 
 
